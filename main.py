@@ -22,12 +22,17 @@ async def main():
         "agent123"
     )
 
-    await seat_monitor.start()
-    await reservation.start()
+    # ✅ START IN CORRECT ORDER
     await recommendation.start()
+    await reservation.start()
+    await seat_monitor.start()
 
-    print("Agents running...")
+    print("All agents started...")
 
+    # Allow time for connection stabilization
+    await asyncio.sleep(5)
+
+    # Run system
     await asyncio.sleep(60)
 
     await seat_monitor.stop()

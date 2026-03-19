@@ -1,6 +1,7 @@
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
+from spade.template import Template
 
 
 class ReservationAgent(Agent):
@@ -14,20 +15,22 @@ class ReservationAgent(Agent):
             if msg:
                 print("Reservation Agent received:", msg.body)
 
-                recommendation_msg = Message(
+                forward_msg = Message(
                     to="recommend.agent@xmpp.jp"
                 )
 
-                recommendation_msg.body = msg.body
+                forward_msg.body = msg.body
+                forward_msg.set_metadata("performative", "inform")
 
-                await self.send(recommendation_msg)
+                await self.send(forward_msg)
 
-                print("Sent seat info to RecommendationAgent")
+                print("Sent to RecommendationAgent")
 
     async def setup(self):
 
         print("Reservation Agent started")
 
-        behaviour = self.ReservationBehaviour()
+        template = Template()
+        template.set_metadata("performative", "inform")
 
-        self.add_behaviour(behaviour)
+        self.add_behaviour(self.ReservationBehaviour(), template)

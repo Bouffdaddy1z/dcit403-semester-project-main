@@ -1,7 +1,6 @@
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
-
 import random
 import asyncio
 
@@ -25,6 +24,7 @@ class SeatMonitorAgent(Agent):
             )
 
             msg.body = str(seats)
+            msg.set_metadata("performative", "inform")
 
             await self.send(msg)
 
